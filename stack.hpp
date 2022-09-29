@@ -9,21 +9,21 @@ const int int_poison  = 47789;
 
 struct info
 {
-    const char *func_name;
-    const char *file_name;
-    const char *stack_name;
-    int line;
+    const char *func_name = NULL;
+    const char *file_name = NULL;
+    const char *stack_name = NULL;
+    int line = 0;
 };
 
 struct Stack_t
 {
-    int left_canary;
-    Elem_t *data;
-    int hash;
-    size_t size;
-    size_t capacity;
-    info stack_info;
-    int right_canary;
+    int left_canary = 0;
+    Elem_t *data = NULL;
+    int hash = 0;
+    size_t size = 0;
+    size_t capacity = 0;
+    info stack_info = {};
+    int right_canary = 0;
 };
 
 #endif
