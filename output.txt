@@ -1,0 +1,20 @@
+RIGHT DATA CANARY ERROR
+
+stack_pop() at stack_functions.cpp.cpp (137)
+stack[0064FED4] (ERROR) "stack1" at main() at main.cpp (21)
+{
+ size     = 6
+ capacity = 10
+
+*[0] = 0
+*[1] = 1
+*[2] = 4
+*[3] = 9
+*[4] = 16
+*[5] = 25
+ [6] = NAN (poison)
+ [7] = NAN (poison)
+*[8] = -1.08405e+073
+*[9] = 1.58479e+040
+}
+
