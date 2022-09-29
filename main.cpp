@@ -17,7 +17,7 @@ int main ()
         return  0;
     }
 
-    Stack_t stack1 ;
+    Stack_t stack1 = {};
     stack_ctor (stack1, 2);
     
     for (int index = 0; index < 6; index++)
