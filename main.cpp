@@ -18,21 +18,25 @@ int main ()
     }
 
     Stack_t stack1 = {};
-    stack_ctor (stack1, 2);
-    
+    stack_ctor (stack1, 1);
+
+
     for (int index = 0; index < 6; index++)
     {
         stack_push (&stack1, index*index);
     }
 
-    stack1.capacity = 10;
-    //stack1.data[0] = 100;         
+    // long *t = (long *) &stack1;
+    // *t = 0;
+    //stack1.capacity = 10;
+    
+    //stack1.data[0] = 100;       
 
-
+    stack_pop (&stack1);
     stack_pop (&stack1);
 
     stack_dump (output_file, &stack1, FULL);
 
     stack_dtor (&stack1);
-
+    fclose (output_file);
 }

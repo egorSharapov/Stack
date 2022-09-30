@@ -20,6 +20,7 @@ struct Stack_t
     int left_canary = 0;
     Elem_t *data = NULL;
     int hash = 0;
+    int data_hash = 0;
     size_t size = 0;
     size_t capacity = 0;
     info stack_info = {};

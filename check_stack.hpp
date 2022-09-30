@@ -38,6 +38,7 @@ enum ERRORS
     LEFT_DATA_CANARY_ERROR = 5,
     RIGHT_DATA_CANARY_ERROR = 6,
     HASH_ERROR = 7,
+    NULL_POINTER_ERROR = 8,
 };
 
 
@@ -52,11 +53,12 @@ enum DUMP_MODE
 void   print_stack_data      (FILE *file, int index, int stack_data);
 void   print_stack_data      (FILE *file, int index, double stack_data);
 void   stack_dump_           (FILE *file, Stack_t *stack, DUMP_MODE mode, const char *func_name, const char *file_name, const int line);
-void print_stack_error (unsigned long errors_code);
+void   print_stack_error     (unsigned long errors_code);
 int    calculate_hash        (void * obj, size_t size);
 void   calculate_stack_hash  (Stack_t * stack);
 bool   check_stack_hash      (Stack_t *stack);
 int    update_stack_hash     (Stack_t *stack);
+int    update_data_hash      (Stack_t *stack);
 Elem_t *create_data_canary   (Stack_t * stack);
 Elem_t *recreate_data_canary (Stack_t * stack);
 

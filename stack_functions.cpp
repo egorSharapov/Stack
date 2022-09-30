@@ -1,12 +1,3 @@
-
-#ifdef DEBUG
-    #include "check_stack.hpp"
-#else
-    #include "stack_functions.hpp"
-#endif
-
-#include "check_stack.hpp"
-
 #include "config.h"
 #include <string.h>
 #include <math.h>
@@ -14,7 +5,13 @@
 #include <malloc.h>
 #include <assert.h>
 
-//FILE *output_file = fopen ("output.txt", "w");
+
+#ifdef DEBUG
+    #include "check_stack.hpp"
+#else
+    #include "stack_functions.hpp"
+#endif
+
 
 void stack_ctor_ (Stack_t *stack, size_t capacity, const char * stack_name, const char * func_name, const char * file_name, const int line)
 {
@@ -32,11 +29,7 @@ void stack_ctor_ (Stack_t *stack, size_t capacity, const char * stack_name, cons
         stack->data = (Elem_t *) calloc (1,  stack->capacity*sizeof(Elem_t));
     #endif
 
-    stack->stack_info.func_name = func_name;
-    stack->stack_info.file_name = file_name;
-    stack->stack_info.stack_name = stack_name;
-    stack->stack_info.line = line;
-    
+    fill_info (stack, func_name, file_name, stack_name, line);
     
     for (unsigned index = 0; index < capacity; index++)
     {
@@ -53,6 +46,13 @@ void stack_ctor_ (Stack_t *stack, size_t capacity, const char * stack_name, cons
     #endif
 }
 
+void fill_info (Stack_t *stack, const char *func_name, const char *file_name, const char *stack_name, int line)
+{
+    stack->stack_info.func_name = func_name;
+    stack->stack_info.file_name = file_name;
+    stack->stack_info.stack_name = stack_name;
+    stack->stack_info.line = line;
+}
 
 void stack_data_fill (int *stack_data)
 {
@@ -71,7 +71,9 @@ void stack_data_fill (double *stack_data)
 
 void stack_dtor (Stack_t *stack)
 {
-    assert (stack);
+    #ifdef DEBUG
+        assert_ok (stack);
+    #endif
 
     stack->capacity = -1;
     stack->size = -2;
@@ -85,7 +87,7 @@ void *recalloc(void *ptr, size_t num, size_t size)
     
     ptr = realloc (ptr, size*num);
 
-    if ((int)(num - temp_size) > 0)
+    if (!ptr and (num*size > temp_size))
         memset ((char *) ptr + temp_size, 0, num*size - temp_size);
 
     return ptr;
@@ -94,9 +96,9 @@ void *recalloc(void *ptr, size_t num, size_t size)
 
 void stack_realloc (Stack_t *stack)
 {
-    assert (stack);
 
     stack->capacity *= multiple;
+    
     if (stack->capacity == 0) 
         stack->capacity++;
     
@@ -113,7 +115,6 @@ void stack_realloc (Stack_t *stack)
 
 void stack_push (Stack_t *stack, Elem_t value)
 {
-    assert (stack);
     #ifdef DEBUG
         assert_ok (stack);
     #endif
@@ -131,35 +132,36 @@ void stack_push (Stack_t *stack, Elem_t value)
 
 Elem_t stack_pop (Stack_t *stack, int *err)
 {
-    assert (stack);
-
     #ifdef DEBUG
         assert_ok (stack);
+        
     #endif
-
+    
     Elem_t value = 0;
 
-    if (err != NULL ) *err = 1;
+    if (err) *err = 1;
 
     if (stack->size > 0)
     {
         value = stack->data[--stack->size];
         stack_data_fill (&stack->data[stack->size]);
         stack_fit (stack);
-        if (err != NULL ) *err = 0;
+        if (err) *err = 0;
 
         #ifdef HASHCHECK
             calculate_stack_hash (stack);
         #endif
     }
-   
+
 
     return value;
 }
 
 void stack_fit (Stack_t *stack)
 {
-    assert (stack);
+    #ifdef DEBUG
+        assert (stack);
+    #endif
 
     if (stack->size*multiple <= stack->capacity and stack->size != 0)
     {
